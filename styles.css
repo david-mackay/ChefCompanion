@@ -5,8 +5,14 @@ body, html {
     margin: 0;
 }
 
+.content-section {
+    padding: 40px; /* Adjust this value as needed */
+    /* other styles... */
+}
+
 
 .menu {
+    padding: 40px 0px 0px 0px;
     position: fixed;
     top: 0;
     left: -80vw; /* Initially hidden */
@@ -163,5 +169,49 @@ button:hover {
     background-color: #007BFF;
     color: #fff;
     align-self: flex-end;
+}
+
+/* ... existing CSS ... */
+
+/* Recipes Section Styling */
+.recipe-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    padding: 15px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.recipe-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recipe-description {
+    margin: 10px 0;
+}
+
+.recipe-details {
+    display: none;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.recipe-ingredients, .recipe-directions {
+    margin-top: 10px;
+}
+
+
+.recipe-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out; /* Animation for smooth transition */
+}
+
+.recipe-card.expanded .recipe-details {
+    max-height: 1000px; /* Adjust this value based on your expected max content height */
+    display: block;
 }
 

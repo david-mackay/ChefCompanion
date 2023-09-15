@@ -7,34 +7,39 @@
     <title>Recipe Chat App</title>
 </head>
 <body>
-<!--<img src="menu_icon.png" alt="Menu" id="menuButton">-->
-<div class="menu-icon" onclick="toggleMenuIcon(this)" id="menuButton">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-</div>
-<div class="menu" id="menu">
-
-    <div class="menu-items" id="menuItems">
-        <a href="#" onclick="loadHomePage()">Home</a>
-        <a href="#" onclick="loadRecipePage()">Recipes <img src="recipe_icon.png" ></a>
-        <a href="#" onclick="loadPantryPage()">Pantry</a>
+    <!-- Menu Icon and Overlay -->
+    <div class="menu-icon" onclick="toggleMenuIcon(this)" id="menuButton">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
     </div>
-</div>
+    <div class="menu" id="menu">
+        <div class="menu-items" id="menuItems">
+            <a href="#" onclick="loadView('home')">Home</a>
+            <a href="#" onclick="loadRecipePage()">Recipes</a>
+            <a href="#" onclick="loadPantryPage()">Pantry</a>
+        </div>
+    </div>
     <div class="overlay" id="overlay"></div>
 
-
-
-
-    <div class="chat-container" id="chatContainer">
-        <div class="message bot">What protein would you like to cook today?</div>
-        <div class="user-input">
-        <input type="text" id="userMessage" placeholder="Type your message...">
-        <button onclick="sendMessage()">Send</button>
-</div>
-
+    <!-- Content Area -->
+<div id="mainContent">
+    <div id="homeContent" class="content-section">
+        <div class="chat-container" id="chatContainer">
+            <div class="message bot">What protein would you like to cook today?</div>
+            <div class="user-input">
+                <input type="text" id="userMessage" placeholder="Type your message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
     </div>
-
+    <div id="recipesContent" class="content-section" style="display: none;">
+        <!-- Placeholder for recipes content -->
+    </div>
+    <div id="pantryContent" class="content-section" style="display: none;">
+        <!-- Placeholder for pantry content -->
+    </div>
+</div>
 
     <script src="app.js"></script>
 </body>
