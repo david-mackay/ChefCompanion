@@ -141,9 +141,71 @@ function loadRecipePage() {
 
 
 function loadPantryPage() {
-    // API call or DOM manipulation to load pantry page content
-    // fetchPantryData();
+    const pantryContainer = document.getElementById('pantryContent').querySelector('.pantry-categories');
+
+    let pantryHtml = '';
+
+    categories.forEach(category => {
+        const itemsInCategory = defaultPantry.filter(item => item.category === category);
+
+        if (itemsInCategory.length > 0) {
+            let categoryHtml = `<div class="pantry-category">
+                <h3>${category}</h3>
+                <ul>`;
+
+            itemsInCategory.forEach(item => {
+    categoryHtml += `
+    <div class="ingredient-card">
+        <span class="item-name">${item.item}</span>
+        <button class="item-button remove" onclick="removeItem('${item.item}')">×</button>
+        <div class="quantity-actions">
+            <button class="item-button minus" onclick="decreaseItem('${item.item}')">−</button>
+            <span>${item.quantity} ${item.storageType}</span>
+            <button class="item-button plus" onclick="addItem('${item.item}')">+</button>
+        </div>
+    </div>`;
+});
+categoryHtml += `<button class="save-updates" onclick="updateDatabase()">Save Updates</button>`;
+
+});
+
+
+            categoryHtml += `</ul></div>`;
+            pantryHtml += categoryHtml;
+        }
+    });
+
+    pantryContainer.innerHTML = pantryHtml;
+    loadView('pantry');
 }
+
+function removeItem(itemName) {
+    const itemIndex = defaultPantry.findIndex(item => item.item === itemName);
+    if (itemIndex > -1) {
+        updateDatabase('remove', defaultPantry[itemIndex]);
+        defaultPantry.splice(itemIndex, 1);
+        loadPantryPage();
+    }
+}
+
+function decreaseItem(itemName) {
+    const item = defaultPantry.find(item => item.item === itemName);
+    if (item) {
+        if (item.quantity > 0) {
+            item.quantity -= 1; // decrement by one unit/kg
+            loadPantryPage();
+        }
+    }
+}
+
+function addItem(itemName) {
+    const item = defaultPantry.find(item => item.item === itemName);
+    if (item) {
+        item.quantity += 1; // increment by one unit/kg
+        loadPantryPage();
+    }
+}
+
 
 // Example API call functions (to be fleshed out)
 function fetchHomeData() {
@@ -176,6 +238,21 @@ function sendMessage() {
     userMessageInput.value = '';
 }
 
+const categories = [
+    'Vegetables', 'Fruits', 'Legumes', 'Starch', 'Meat', 'Dairy', 'Grains', 'Nuts & Seeds', 'Spices & Herbs', 'Beverages', 'Oils & Fats', 'Sweeteners', 'Baking', 'Condiments', 'Seafood', 'Poultry', 'Desserts', 'Frozen'
+];
+
+const defaultPantry = [
+    { category: 'vegetables', item: 'Broccoli', quantity: 1, storageType: 'unit' },
+    { category: 'fruits', item: 'Apple', quantity: 5, storageType: 'unit' },
+    { category: 'meat', item: 'Beef', quantity: 2, storageType: 'kg' },
+    { category: 'starch', item: 'Spaghetti', quantity: 1, storageType: 'kg' },
+    // ... other items
+];
+function updateDatabase(action, item) {
+    // Template function for API requests to update the database
+    console.log(`API Request to ${action} ${item.item}`);
+}
 
 
 window.onload = function() {

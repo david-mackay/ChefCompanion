@@ -215,3 +215,87 @@ button:hover {
     display: block;
 }
 
+.pantry-category {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.pantry-category h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.pantry-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.pantry-item button {
+    margin-left: 5px;
+}
+
+.pantry-item button.item-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.2s;
+}
+
+.pantry-item button.remove {
+    color: red;
+    font-weight: bold;
+}
+
+.pantry-item button.plus {
+    color: green;
+}
+
+.pantry-item button.minus {
+    color: blue;
+}
+
+.pantry-item button.item-button:hover {
+    color: #555;
+}
+
+.ingredient-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    position: relative;
+    width: 150px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.item-name {
+    margin-bottom: 10px;
+}
+
+.item-button.remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.quantity-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.save-updates {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
