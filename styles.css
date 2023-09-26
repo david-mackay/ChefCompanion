@@ -299,3 +299,75 @@ button:hover {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Dark Theme Styles */
+body.dark-theme {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+.menu.dark-theme {
+    background-color: #444;
+}
+
+.menu-items a.dark-theme {
+    background-color: #555;
+    color: #f5f5f5;
+    border-color: #666;
+}
+
+.menu-items a.dark-theme:hover {
+    background-color: #666;
+}
+
+.message.bot.dark-theme {
+    background-color: #555;
+    color: #f5f5f5;
+}
+
+.message.user.dark-theme {
+    background-color: #777;
+    color: #f5f5f5;
+}
+
+/* Further Dark Theme Adjustments */
+
+.chat-container.dark-theme {
+    background-color: #444;
+    border: 1px solid #555;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.recipe-card.dark-theme {
+    background-color: #444;
+    border-color: #555;
+    color: #f5f5f5;
+}
+
+.recipe-card.dark-theme .recipe-title,
+.recipe-card.dark-theme .recipe-description,
+.recipe-card.dark-theme .recipe-ingredients,
+.recipe-card.dark-theme .recipe-directions {
+    color: #f5f5f5;
+}
+
+/* Clear Dark Theme Adjustments */
+
+.recipe-card.dark-theme {
+    background-color: #2b2b2b;
+    border: 1px solid #3a3a3a;
+    color: #ebebeb;
+}
+
+.recipe-card.dark-theme .recipe-title,
+.recipe-card.dark-theme .recipe-description,
+.recipe-card.dark-theme .recipe-ingredients,
+.recipe-card.dark-theme .recipe-directions {
+    color: #ebebeb;
+}
+
+.chat-container.dark-theme {
+    background-color: #2b2b2b;
+    border: 1px solid #3a3a3a;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

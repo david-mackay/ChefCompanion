@@ -2,6 +2,34 @@ let menuOpen = false;  // This variable keeps track of whether the menu is open 
 
 document.getElementById('menuButton').addEventListener('click', toggleMenu);
 
+const apiBaseURL = "http://localhost:4000";
+
+function saveUpdates() {
+    const ingredientValues = [
+        // This is just a mockup, you'll need to collect actual values from the frontend
+        {
+            category: 'Vegetables',
+            item: 'Broccoli',
+            quantity: 1,
+            storageType: 'unit'
+        }
+        // ... other ingredients
+    ];
+
+    fetch(`${apiBaseURL}/updatePantry`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ingredientValues)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // Handle the response from the server here
+    });
+}
+
 function loadView(viewName) {
     // Hide all sections first
     const sections = document.querySelectorAll('.content-section');
@@ -28,7 +56,6 @@ function toggleMenuIcon(element) {
 
 
 function toggleMenu() {
-    console.log("Workin")
     let menu = document.getElementById('menu');
     let overlay = document.getElementById('overlay');
     if (!menu || !overlay) {
@@ -55,6 +82,17 @@ function loadHomePage() {
 
 // ... existing JS ...
 // ... existing JS ...
+
+
+function fetchAllRecipes() {
+    fetch(`${apiBaseURL}/returnAllRecipes`)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // Handle the returned recipes here
+    });
+}
+
 
 function fetchRecipeData() {
     return new Promise((resolve) => {
@@ -154,30 +192,29 @@ function loadPantryPage() {
                 <ul>`;
 
             itemsInCategory.forEach(item => {
-    categoryHtml += `
-    <div class="ingredient-card">
-        <span class="item-name">${item.item}</span>
-        <button class="item-button remove" onclick="removeItem('${item.item}')">×</button>
-        <div class="quantity-actions">
-            <button class="item-button minus" onclick="decreaseItem('${item.item}')">−</button>
-            <span>${item.quantity} ${item.storageType}</span>
-            <button class="item-button plus" onclick="addItem('${item.item}')">+</button>
-        </div>
-    </div>`;
-});
-categoryHtml += `<button class="save-updates" onclick="updateDatabase()">Save Updates</button>`;
+                categoryHtml += `
+                <li>
+                <div class="ingredient-card">
+                    <span class="item-name">${item.item}</span>
+                    <button class="item-button remove" onclick="removeItem('${item.item}')">×</button>
+                        <div class="quantity-actions">
+                            <button class="item-button minus" onclick="decreaseItem('${item.item}')">−</button>
+                            <span>${item.quantity} ${item.storageType}</span>
+                            <button class="item-button plus" onclick="addItem('${item.item}')">+</button>
+                        </div>
+                </div>
+                </li>`;
+            });
 
-});
+            categoryHtml += `</ul></div>`;  // Closing ul and div tags here
 
-
-            categoryHtml += `</ul></div>`;
             pantryHtml += categoryHtml;
         }
     });
-
+    pantryHtml += `<button class="save-updates" onclick="updateDatabase()">Save Updates</button>`
     pantryContainer.innerHTML = pantryHtml;
     loadView('pantry');
-}
+};
 
 function removeItem(itemName) {
     const itemIndex = defaultPantry.findIndex(item => item.item === itemName);
@@ -212,9 +249,39 @@ function fetchHomeData() {
     // API call to get home data
 }
 
+function fetchAllIngredients() {
+    fetch(`${apiBaseURL}/returnAllIngredients`)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // Handle the returned ingredients here
+    });
+}
+
 function fetchPantryData() {
     // API call to get pantry data
 }
+
+function send(message) {
+    const payload = {
+        message_content: message
+        // Add any other necessary data here, like apikey if needed
+    };
+
+    fetch(`${apiBaseURL}/send_message`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // Handle the response from GPT here
+    });
+}
+
 
 function sendMessage() {
     const chatContainer = document.getElementById('chatContainer');
@@ -243,10 +310,10 @@ const categories = [
 ];
 
 const defaultPantry = [
-    { category: 'vegetables', item: 'Broccoli', quantity: 1, storageType: 'unit' },
-    { category: 'fruits', item: 'Apple', quantity: 5, storageType: 'unit' },
-    { category: 'meat', item: 'Beef', quantity: 2, storageType: 'kg' },
-    { category: 'starch', item: 'Spaghetti', quantity: 1, storageType: 'kg' },
+    { category: 'Vegetables', item: 'Broccoli', quantity: 1, storageType: 'unit' },
+    { category: 'Fruits', item: 'Apple', quantity: 5, storageType: 'unit' },
+    { category: 'Meat', item: 'Beef', quantity: 2, storageType: 'kg' },
+    { category: 'Starch', item: 'Spaghetti', quantity: 1, storageType: 'kg' },
     // ... other items
 ];
 function updateDatabase(action, item) {
@@ -257,4 +324,18 @@ function updateDatabase(action, item) {
 
 window.onload = function() {
     loadView('home');
+}
+function toggleTheme() {
+    const body = document.body;
+    const themeToggleText = document.getElementById('themeToggle');
+    
+    if (body.classList.contains('dark-theme')) {
+        // If dark theme is currently applied, switch to light theme
+        body.classList.remove('dark-theme');
+        themeToggleText.textContent = 'Toggle to Dark Theme';
+    } else {
+        // Otherwise, switch to dark theme
+        body.classList.add('dark-theme');
+        themeToggleText.textContent = 'Toggle to Light Theme';
+    }
 }
