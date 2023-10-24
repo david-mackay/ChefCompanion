@@ -1,56 +1,23 @@
-
 from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = "mysql+pymysql://david:Spiritualman!2@localhost:3306/chefcompanion"
 
-# Sample data for mockup purposes
-ingredients_data = [
-    {
-        "category": "Vegetables",
-        "item": "Broccoli",
-        "quantity": 1,
-        "storageType": "unit"
-    }
-    # ... other ingredients
-]
-
-recipes_data = [
-    {
-        "name": "Spaghetti Carbonara",
-        "description": "A classic Italian dish.",
-        "ingredients": ["Spaghetti", "Eggs", "Pancetta", "Parmesan cheese"],
-        "directions": ["Cook spaghetti.", "Mix eggs and cheese.", "Fry pancetta.", "Combine all ingredients."]
-    }
-    # ... other recipes
-]
-
-
-@app.route("/returnAllIngredients", methods=["GET"])
-def returnAllIngredients():
-    # For now, returning the sample data. In a real setup, you'd query the database.
-    return jsonify(ingredients_data)
-
-
-@app.route("/returnAllRecipes", methods=["GET"])
-def returnAllRecipes():
-    # For now, returning the sample data. In a real setup, you'd query the database.
-    return jsonify(recipes_data)
-
-
-@app.route("/updatePantry", methods=["POST"])
-def updatePantry():
-    data = request.json
-    # In a real setup, you'd update the database with the received data.
-    return jsonify({"status": "success", "message": "Pantry updated successfully!"})
-
-
-@app.route("/send_message", methods=["POST"])
-def send_message():
-    data = request.json
-    message_content = data.get("message_content")
-    # For now, just echoing the message. In a real setup, you'd process the message using GPT.
-    return jsonify({"status": "success", "message": message_content})
+CORS(app)  # Enable CORS for all routes
+db = SQLAlchemy(app)
+messages = []
 
 
 if __name__ == "__main__":
-    app.run(port=4000, debug=True)
+    with app.app_context():
+        from functions import initialize_session
+
+        initialize_session()
+        from endpoints import *
+
+    app.run(debug=True, use_reloader=False)

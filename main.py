@@ -6,8 +6,8 @@ def send_message():
 
     gpt_response = get_gpt_response(input_data)
 
-    next_functions = gpt_response.get('next_functions', [])
-    function_args = gpt_response.get('function_arg', [])
+    next_functions = gpt_response.get("next_functions", [])
+    function_args = gpt_response.get("function_arg", [])
 
     if len(next_functions) != len(function_args):
         return ("Mismatch in functions and arguments length", 400)
@@ -27,11 +27,13 @@ def send_message():
 
     return ("No reply function found in GPT's response", 400)
 
+
 def get_gpt_response(input_data):
     # ... your code to get GPT's response
     return response
-# This is a sample Python script.
 
+
+# This is a sample Python script.
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

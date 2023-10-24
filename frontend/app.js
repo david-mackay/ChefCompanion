@@ -2,7 +2,7 @@ let menuOpen = false;  // This variable keeps track of whether the menu is open 
 
 document.getElementById('menuButton').addEventListener('click', toggleMenu);
 
-const apiBaseURL = "http://localhost:4000";
+const apiBaseURL = "http://localhost:5000";
 
 function saveUpdates() {
     const ingredientValues = [
@@ -80,52 +80,13 @@ function loadHomePage() {
     // fetchHomeData();
 }
 
-// ... existing JS ...
-// ... existing JS ...
-
-
-function fetchAllRecipes() {
-    fetch(`${apiBaseURL}/returnAllRecipes`)
+// function to fetch recipe data from the server
+function fetchRecipeData() {
+    return fetch(`${apiBaseURL}/returnAllRecipes`)
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        // Handle the returned recipes here
-    });
-}
-
-
-function fetchRecipeData() {
-    return new Promise((resolve) => {
-        // Simulating an async call with setTimeout.
-        // Replace this with your actual fetch/axios call in the future.
-        setTimeout(() => {
-            resolve([
-                {
-                    name: "Spaghetti Carbonara",
-                    description: "A classic Italian dish.",
-                    ingredients: ["Spaghetti", "Eggs", "Pancetta", "Parmesan cheese"],
-                    directions: ["Cook spaghetti.", "Mix eggs and cheese.", "Fry pancetta.", "Combine all ingredients."]
-                },
-                {
-                    name: "Chicken Tikka Masala",
-                    description: "A popular Indian dish.",
-                    ingredients: ["Chicken", "Yogurt", "Tomatoes", "Spices"],
-                    directions: ["Marinate chicken in yogurt and spices.", "Fry chicken.", "Make sauce with tomatoes.", "Combine chicken and sauce."]
-                },
-                {
-                    name: "Caesar Salad",
-                    description: "Healthy salad with romaine lettuce.",
-                    ingredients: ["Romaine lettuce", "Croutons", "Parmesan cheese", "Caesar dressing"],
-                    directions: ["Chop lettuce.", "Add croutons and cheese.", "Pour dressing."]
-                },
-                {
-                    name: "Chocolate Cake",
-                    description: "Decadent and moist chocolate dessert.",
-                    ingredients: ["Flour", "Cocoa powder", "Eggs", "Sugar"],
-                    directions: ["Mix dry ingredients.", "Add eggs.", "Bake in oven."]
-                }
-            ]);
-        }, 1000); // 1 second delay to simulate server response time.
+        return data;
     });
 }
 
@@ -137,7 +98,6 @@ function toggleRecipeDetails(clickedRecipeCard) {
             card.classList.remove('expanded');
         }
     });
-
     // Now, toggle the expansion of the clicked recipe card
     clickedRecipeCard.classList.toggle('expanded');
 }
@@ -146,7 +106,7 @@ function toggleRecipeDetails(clickedRecipeCard) {
 
 function loadRecipePage() {
     const recipeContainer = document.getElementById('recipesContent');
-
+    console.log("Loading recipes...");
     fetchRecipeData().then(recipes => {
         let recipeHtml = '';
 
@@ -173,48 +133,43 @@ function loadRecipePage() {
     });
 }
 
-// ... remaining JS ...
-
-// ... remaining JS ...
-
-
 function loadPantryPage() {
     const pantryContainer = document.getElementById('pantryContent').querySelector('.pantry-categories');
-
+    console.log("Loading pantry...");
     let pantryHtml = '';
-
+    fetchPantryData().then(defaultPantry => {
     categories.forEach(category => {
-        const itemsInCategory = defaultPantry.filter(item => item.category === category);
+            const itemsInCategory = defaultPantry.filter(item => item.category === category);
 
-        if (itemsInCategory.length > 0) {
-            let categoryHtml = `<div class="pantry-category">
-                <h3>${category}</h3>
-                <ul>`;
+            if (itemsInCategory.length > 0) {
+                let categoryHtml = `<div class="pantry-category">
+                    <h3>${category}</h3>
+                    <ul>`;
 
-            itemsInCategory.forEach(item => {
-                categoryHtml += `
-                <li>
-                <div class="ingredient-card">
-                    <span class="item-name">${item.item}</span>
-                    <button class="item-button remove" onclick="removeItem('${item.item}')">×</button>
-                        <div class="quantity-actions">
-                            <button class="item-button minus" onclick="decreaseItem('${item.item}')">−</button>
-                            <span>${item.quantity} ${item.storageType}</span>
-                            <button class="item-button plus" onclick="addItem('${item.item}')">+</button>
-                        </div>
-                </div>
-                </li>`;
-            });
+                itemsInCategory.forEach(item => {
+                    categoryHtml += `
+                    <li>
+                    <div class="ingredient-card">
+                        <span class="item-name">${item.item}</span>
+                        <button class="item-button remove" onclick="removeItem('${item.item}')">×</button>
+                            <div class="quantity-actions">
+                                <button class="item-button minus" onclick="decreaseItem('${item.item}')">−</button>
+                                <span>${item.quantity} ${item.storageType}</span>
+                                <button class="item-button plus" onclick="addItem('${item.item}')">+</button>
+                            </div>
+                    </div>
+                    </li>`;
+                });
 
-            categoryHtml += `</ul></div>`;  // Closing ul and div tags here
+                categoryHtml += `</ul></div>`;  // Closing ul and div tags here
 
-            pantryHtml += categoryHtml;
+                pantryHtml += categoryHtml;
         }
     });
     pantryHtml += `<button class="save-updates" onclick="updateDatabase()">Save Updates</button>`
     pantryContainer.innerHTML = pantryHtml;
     loadView('pantry');
-};
+})};
 
 function removeItem(itemName) {
     const itemIndex = defaultPantry.findIndex(item => item.item === itemName);
@@ -249,25 +204,40 @@ function fetchHomeData() {
     // API call to get home data
 }
 
-function fetchAllIngredients() {
-    fetch(`${apiBaseURL}/returnAllIngredients`)
-    .then(response => response.json())
+function fetchPantryData() {
+    return fetch(`${apiBaseURL}/returnAllIngredients`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         console.log(data);
-        // Handle the returned ingredients here
+        return data;
     });
 }
 
-function fetchPantryData() {
-    // API call to get pantry data
-}
+function send() {
+    const message = document.getElementById("userMessage").value;
 
-function send(message) {
+    if (!message) {
+        // Optionally handle the case where the input is empty
+        console.log("Message is empty");
+        return;
+    }
     const payload = {
         message_content: message
         // Add any other necessary data here, like apikey if needed
     };
+    const chatContainer = document.getElementById('chatContainer');
+    const userMessageInput = document.getElementById('userMessage');
 
+    // Display user's message
+    const userMsgDiv = document.createElement('div');
+    userMsgDiv.className = 'message user';
+    userMsgDiv.textContent = userMessageInput.value;
+    chatContainer.appendChild(userMsgDiv);
     fetch(`${apiBaseURL}/send_message`, {
         method: 'POST',
         headers: {
@@ -278,8 +248,14 @@ function send(message) {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        const serverMsgDiv = document.createElement('div');
+        serverMsgDiv.className = 'message bot';
+        serverMsgDiv.textContent = data['message'];
+        chatContainer.appendChild(serverMsgDiv);
         // Handle the response from GPT here
     });
+
+    userMessageInput.value = '';
 }
 
 
@@ -306,16 +282,9 @@ function sendMessage() {
 }
 
 const categories = [
-    'Vegetables', 'Fruits', 'Legumes', 'Starch', 'Meat', 'Dairy', 'Grains', 'Nuts & Seeds', 'Spices & Herbs', 'Beverages', 'Oils & Fats', 'Sweeteners', 'Baking', 'Condiments', 'Seafood', 'Poultry', 'Desserts', 'Frozen'
+    'vegetables', 'fruits', 'legumes', 'starch', 'meat', 'dairy', 'grains', 'Spices & Herbs', 'Beverages', 'Oils & Fats', 'Sweeteners', 'Baking', 'Condiments', 'Seafood', 'Poultry', 'Desserts', 'Frozen'
 ];
 
-const defaultPantry = [
-    { category: 'Vegetables', item: 'Broccoli', quantity: 1, storageType: 'unit' },
-    { category: 'Fruits', item: 'Apple', quantity: 5, storageType: 'unit' },
-    { category: 'Meat', item: 'Beef', quantity: 2, storageType: 'kg' },
-    { category: 'Starch', item: 'Spaghetti', quantity: 1, storageType: 'kg' },
-    // ... other items
-];
 function updateDatabase(action, item) {
     // Template function for API requests to update the database
     console.log(`API Request to ${action} ${item.item}`);
