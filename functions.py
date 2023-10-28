@@ -12,7 +12,7 @@ db_config = {
     "database": "chefcompanion",
 }
 
-openai.api_key = "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"
+openai.api_key = "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"
 
 # variable to access GPT-3
 
