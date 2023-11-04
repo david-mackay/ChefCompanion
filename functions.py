@@ -5,14 +5,12 @@ import openai
 from sqlalchemy import text
 from describe_database import get_db_schema
 
-db_config = {
-    "host": "localhost",
-    "user": "david",
-    "password": "Spiritualman!2",
-    "database": "chefcompanion",
-}
+with open('db_config.json', 'r') as f:
+    db_config = json.load(f)
 
-openai.api_key = "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"
+# Load the API key from api_key.txt
+with open('api_key.txt', 'r') as f:
+    openai_api_key = f.read().strip()
 
 # variable to access GPT-3
 
